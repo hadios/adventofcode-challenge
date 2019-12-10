@@ -22,7 +22,7 @@ func TestCalculateFuel(t *testing.T) {
 	total := executeOpsCommand(initial)
 
 	if !Equal(total, ans) {
-		t.Errorf("Sum was incorrect, got: %d, want: %d.", total, ans)
+		t.Errorf("Result was incorrect, got: %d, want: %d.", total, ans)
 	}
 
 	initial = []int64{2, 3, 0, 3, 99}
@@ -30,7 +30,7 @@ func TestCalculateFuel(t *testing.T) {
 	total = executeOpsCommand(initial)
 
 	if !Equal(total, ans) {
-		t.Errorf("Sum was incorrect, got: %d, want: %d.", total, ans)
+		t.Errorf("Result was incorrect, got: %d, want: %d.", total, ans)
 	}
 
 	initial = []int64{2, 4, 4, 5, 99, 0}
@@ -38,7 +38,7 @@ func TestCalculateFuel(t *testing.T) {
 	total = executeOpsCommand(initial)
 
 	if !Equal(total, ans) {
-		t.Errorf("Sum was incorrect, got: %d, want: %d.", total, ans)
+		t.Errorf("Result was incorrect, got: %d, want: %d.", total, ans)
 	}
 
 	initial = []int64{1, 1, 1, 4, 99, 5, 6, 0, 99}
@@ -46,6 +46,6 @@ func TestCalculateFuel(t *testing.T) {
 	total = executeOpsCommand(initial)
 
 	if !Equal(total, ans) {
-		t.Errorf("Sum was incorrect, got: %d, want: %d.", total, ans)
+		t.Errorf("Result was incorrect, got: %d, want: %d.", total, ans)
 	}
 }
