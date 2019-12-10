@@ -2,52 +2,62 @@ package main
 
 import "testing"
 
+type testData struct {
+	input  int64
+	result int64
+}
+
 func TestCalculateFuel(t *testing.T) {
-	var initial int64 = 12
-	var ans int64 = 2
-	total := CalculateFuel(initial)
 
-	if total != ans {
-		t.Errorf("Sum was incorrect, got: %d, want: %d.", total, ans)
+	/*
+	** Part 1
+	 */
+	testDataArr := []testData{
+		testData{
+			input:  12,
+			result: 2,
+		},
+		testData{
+			input:  14,
+			result: 2,
+		},
+		testData{
+			input:  1969,
+			result: 654,
+		},
+		testData{
+			input:  100756,
+			result: 33583,
+		},
 	}
 
-	initial = 14
-	ans = 2
-	total = CalculateFuel(initial)
+	for _, s := range testDataArr {
+		total := CalculateFuel(s.input)
 
-	if total != ans {
-		t.Errorf("Sum was incorrect, got: %d, want: %d.", total, ans)
+		if total != s.result {
+			t.Errorf("Result was incorrect, got: %d, want: %d.", total, s.result)
+		}
 	}
 
-	initial = 1969
-	ans = 654
-	total = CalculateFuel(initial)
-
-	if total != ans {
-		t.Errorf("Sum was incorrect, got: %d, want: %d.", total, ans)
+	/*
+	** Part 2
+	 */
+	testDataArr2 := []testData{
+		testData{
+			input:  14,
+			result: 2,
+		},
+		testData{
+			input:  1969,
+			result: 966,
+		},
 	}
 
-	initial = 100756
-	ans = 33583
-	total = CalculateFuel(initial)
+	for _, s := range testDataArr2 {
+		total := CalculateFuelRepeat(s.input)
 
-	if total != ans {
-		t.Errorf("Sum was incorrect, got: %d, want: %d.", total, ans)
-	}
-
-	initial = 14
-	ans = 2
-	total = CalculateFuelRepeat(initial)
-
-	if total != ans {
-		t.Errorf("Sum was incorrect, got: %d, want: %d.", total, ans)
-	}
-
-	initial = 1969
-	ans = 966
-	total = CalculateFuelRepeat(initial)
-
-	if total != 966 {
-		t.Errorf("Sum was incorrect, got: %d, want: %d.", total, ans)
+		if total != s.result {
+			t.Errorf("Result was incorrect, got: %d, want: %d.", total, s.result)
+		}
 	}
 }
