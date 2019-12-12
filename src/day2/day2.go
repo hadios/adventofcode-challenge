@@ -90,7 +90,7 @@ func main() {
 	// Brute force search
 	for i := 0; i < 100; i++ {
 		for j := 0; j < 100; j++ {
-			arr := ReadFile("./input.txt")
+			arr := readFile("./input.txt")
 
 			modifiedArr := runInitialState(int64(i), int64(j), arr)
 			finalArr := executeOpsCommand(modifiedArr)

@@ -4,6 +4,11 @@ import (
 	"testing"
 )
 
+type testData struct {
+	input  int64
+	result bool
+}
+
 func Equal(a, b []int64) bool {
 	if len(a) != len(b) {
 		return false
@@ -16,76 +21,68 @@ func Equal(a, b []int64) bool {
 	return true
 }
 
-func TestCalculateFuel(t *testing.T) {
-	var initial int64 = 111111
-	var ans = true
-	var total = isIncreasingDigits(initial) && hasDoubleDigits(initial)
-
-	if total != ans {
-		t.Errorf("Result was incorrect, got: %t, want: %t.", total, ans)
+func Test(t *testing.T) {
+	/*
+	** Part 1
+	 */
+	testDataArr := []testData{
+		testData{
+			input:  111111,
+			result: true,
+		},
+		testData{
+			input:  223450,
+			result: false,
+		},
+		testData{
+			input:  123789,
+			result: false,
+		},
 	}
 
-	initial = 223450
-	ans = false
-	total = isIncreasingDigits(initial) && hasDoubleDigits(initial)
+	for _, s := range testDataArr {
+		result := isIncreasingDigits(s.input) && hasDoubleDigits(s.input)
 
-	if total != ans {
-		t.Errorf("Result was incorrect, got: %t, want: %t.", total, ans)
+		if result != s.result {
+			t.Errorf("Result was incorrect, got: %t, want: %t.", result, s.result)
+		}
 	}
 
-	initial = 123789
-	ans = false
-	total = isIncreasingDigits(initial) && hasDoubleDigits(initial)
-
-	if total != ans {
-		t.Errorf("Result was incorrect, got: %t, want: %t.", total, ans)
+	/*
+	** Part 2
+	 */
+	testDataArr2 := []testData{
+		testData{
+			input:  112233,
+			result: true,
+		},
+		testData{
+			input:  123444,
+			result: false,
+		},
+		testData{
+			input:  111122,
+			result: true,
+		},
+		testData{
+			input:  123455,
+			result: true,
+		},
+		testData{
+			input:  222333,
+			result: false,
+		},
+		testData{
+			input:  188999,
+			result: true,
+		},
 	}
 
-	initial = 112233
-	ans = true
-	total = isIncreasingDigits(initial) && hasDoubleDigits(initial) && hasNoLargerDoubleDigits(initial)
+	for _, s := range testDataArr2 {
+		result := isIncreasingDigits(s.input) && hasDoubleDigits(s.input) && hasNoLargerDoubleDigits(s.input)
 
-	if total != ans {
-		t.Errorf("Result was incorrect, got: %t, want: %t.", total, ans)
-	}
-
-	initial = 123444
-	ans = false
-	total = isIncreasingDigits(initial) && hasDoubleDigits(initial) && hasNoLargerDoubleDigits(initial)
-
-	if total != ans {
-		t.Errorf("Result was incorrect, got: %t, want: %t.", total, ans)
-	}
-
-	initial = 111122
-	ans = true
-	total = isIncreasingDigits(initial) && hasDoubleDigits(initial) && hasNoLargerDoubleDigits(initial)
-
-	if total != ans {
-		t.Errorf("Result was incorrect, got: %t, want: %t.", total, ans)
-	}
-
-	initial = 123455
-	ans = true
-	total = isIncreasingDigits(initial) && hasDoubleDigits(initial) && hasNoLargerDoubleDigits(initial)
-
-	if total != ans {
-		t.Errorf("Result was incorrect, got: %t, want: %t.", total, ans)
-	}
-
-	initial = 222333
-	ans = false
-	total = isIncreasingDigits(initial) && hasDoubleDigits(initial) && hasNoLargerDoubleDigits(initial)
-
-	if total != ans {
-		t.Errorf("Result was incorrect, got: %t, want: %t.", total, ans)
-	}
-
-	initial = 188999
-	ans = true
-	total = isIncreasingDigits(initial) && hasDoubleDigits(initial) && hasNoLargerDoubleDigits(initial)
-
-	if total != ans {
-		t.Errorf("Result was incorrect, got: %t, want: %t.", total, ans)
+		if result != s.result {
+			t.Errorf("Result was incorrect, got: %t, want: %t.", result, s.result)
+		}
 	}
 }
