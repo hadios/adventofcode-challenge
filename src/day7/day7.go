@@ -71,8 +71,9 @@ func getOpcode(instruc int64) int64 {
 	return opCode
 }
 
-func executeOpsCommand(arr []int64, input []int64) ([]int64, []int64) {
+func executeOpsCommand(arr []int64, input []int64) ([]int64, []int64, bool) {
 	indexPtr := 0
+	hasHalted := false
 
 	for indexPtr < len(arr) {
 		instruc := arr[indexPtr]
@@ -118,6 +119,7 @@ func executeOpsCommand(arr []int64, input []int64) ([]int64, []int64) {
 			break
 
 		case 3:
+			// log.Printf("%d %d %d", arr, indexPtr, opCode)
 			// Takes input and store in position
 			dest := arr[indexPtr+1]
 			if paramModes[0] == 1 {
@@ -125,7 +127,9 @@ func executeOpsCommand(arr []int64, input []int64) ([]int64, []int64) {
 			}
 			arr[dest] = input[0]
 
+			// if len(input) > 1 {
 			input = input[1:len(input)]
+			// }
 
 			indexPtr += 2
 			break
@@ -224,6 +228,8 @@ func executeOpsCommand(arr []int64, input []int64) ([]int64, []int64) {
 
 		case 99:
 			indexPtr = len(arr)
+			hasHalted = true
+			log.Print("HALTED!")
 			continue
 
 		default:
@@ -234,17 +240,127 @@ func executeOpsCommand(arr []int64, input []int64) ([]int64, []int64) {
 		}
 	}
 
-	return arr, input
+	return arr, input, hasHalted
+}
+
+func amplifyChain(arr []int64, sequence []int64) int64 {
+	var nextInput int64 = 0
+
+	for _, s := range sequence {
+		currentInput := []int64{s, int64(nextInput)}
+
+		newArr := make([]int64, len(arr))
+		copy(newArr, arr)
+		_, newInput, _ := executeOpsCommand(newArr, currentInput)
+		nextInput = newInput[0]
+	}
+
+	return nextInput
+}
+
+func amplifyLoopChain(arr []int64, sequence []int64) int64 {
+	nextInput := []int64{0}
+
+	// Create a copy of the ops software state
+	softStates := [5][]int64{}
+
+	for i := 0; i < 5; i++ {
+		softStates[i] = arr
+	}
+
+	// shouldStop := false
+
+	// for shouldStop == false {
+	for i, s := range sequence {
+		log.Printf("Sequence %d", s)
+		currentInput := []int64{s}
+
+		currentInput = append(currentInput, nextInput...)
+		// newArr := arr
+		log.Print(currentInput)
+
+		_, newInput, hasHalted := executeOpsCommand(softStates[i], currentInput)
+		nextInput = newInput
+
+		if hasHalted {
+			log.Print("Should stop")
+			// shouldStop = true
+			// copy(newArr, arr)
+			// log.Print(newArr)
+		}
+
+		log.Print(nextInput)
+	}
+
+	log.Print("RUnning")
+	// }
+
+	log.Print("EXIT")
+
+	return nextInput[0]
+}
+
+func isNumberValid(numToTest int) bool {
+	arrCount := [10]int{}
+
+	num := numToTest
+	for num > 0 {
+		remain := num % 10
+		arrCount[remain]++
+
+		num /= 10
+	}
+
+	if numToTest < 10000 {
+		arrCount[0]++
+	}
+
+	for i := 0; i < 5; i++ {
+		if arrCount[i] != 1 {
+			return false
+		}
+	}
+
+	return true
 }
 
 func main() {
 	arr := readFile("./input.txt")
 
-	// Part 1
-	// _, output := executeOpsCommand(arr, int64(1))
-	// log.Print(output)
+	var highestCount int64 = 0
+	for i := 1234; i <= 43210; i++ {
+		if isNumberValid(i) == false {
+			continue
+		}
 
-	// Part 2
-	_, output := executeOpsCommand(arr, []int64{5})
-	log.Print(output)
+		order := [5]int64{}
+		temp := i
+
+		if temp < 10000 {
+			order[0] = 0
+		}
+
+		count := 4
+		for temp > 0 {
+			order[count] = int64(temp % 10)
+			temp /= 10
+			count--
+		}
+
+		sequence := []int64{}
+
+		for _, s := range order {
+			sequence = append(sequence, s)
+		}
+
+		currentCount := amplifyChain(arr, sequence)
+
+		if currentCount > highestCount {
+			highestCount = currentCount
+		}
+
+		log.Printf("%d: %d, %d", i, currentCount, sequence)
+	}
+
+	log.Print(highestCount)
 }
