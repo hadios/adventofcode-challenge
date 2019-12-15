@@ -1,24 +1,33 @@
 package main
 
 import (
-	"bufio"
 	"log"
 	"math"
-	"os"
+	"fileutils"
 	"strconv"
 )
 
-func readFile(path string) []int64 {
-	file, err := os.Open(path)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
+func calculateFuel(module int64) int64 {
+	return int64(math.Floor(float64(module/3)) - 2)
+}
 
+func calculateFuelRepeat(mass int64) int64 {
+	var totalFuel int64 = 0
+
+	mass = calculateFuel(mass)
+	for mass > 0 {
+		totalFuel += mass
+		mass = calculateFuel(mass)
+	}
+
+	return totalFuel
+}
+
+func parseData(dataArr []string) []int64 {
 	arr := []int64{}
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		i, err := strconv.ParseInt(scanner.Text(), 10, 64)
+
+	for _, line := range dataArr {
+		i, err := strconv.ParseInt(line, 10, 64)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -26,35 +35,16 @@ func readFile(path string) []int64 {
 		arr = append(arr, i)
 	}
 
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
-
 	return arr
 }
 
-func CalculateFuel(module int64) int64 {
-	return int64(math.Floor(float64(module/3)) - 2)
-}
-
-func CalculateFuelRepeat(mass int64) int64 {
-	var totalFuel int64 = 0
-
-	mass = CalculateFuel(mass)
-	for mass > 0 {
-		totalFuel += mass
-		mass = CalculateFuel(mass)
-	}
-
-	return totalFuel
-}
-
 func main() {
-	arr := readFile("./input.txt")
+	dataStr := fileutils.ReadFile("./input.txt")
+	arr := parseData(dataStr)
 
 	var totalFuel int64 = 0
 	for _, s := range arr {
-		totalFuel += CalculateFuelRepeat(s)
+		totalFuel += calculateFuelRepeat(s)
 	}
 
 	log.Print(totalFuel)

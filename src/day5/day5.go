@@ -1,42 +1,11 @@
 package main
 
 import (
-	"bufio"
+	"fileutils"
 	"log"
-	"os"
 	"strconv"
 	"strings"
 )
-
-func readFile(path string) []int64 {
-	file, err := os.Open(path)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	arr := []int64{}
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		text := scanner.Text()
-		arrStr := strings.Split(text, ",")
-
-		for _, s := range arrStr {
-			i, err := strconv.ParseInt(s, 10, 64)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			arr = append(arr, i)
-		}
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
-
-	return arr
-}
 
 func getParamsMode(instruc int64) [3]int64 {
 	instruc = instruc / 100
@@ -237,8 +206,28 @@ func executeOpsCommand(arr []int64, input []int64) ([]int64, []int64) {
 	return arr, input
 }
 
+func parseData(dataArr []string) []int64 {
+	arr := []int64{}
+
+	for _, line := range dataArr {
+		arrStr := strings.Split(line, ",")
+
+		for _, s := range arrStr {
+			i, err := strconv.ParseInt(s, 10, 64)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			arr = append(arr, i)
+		}
+	}
+
+	return arr
+}
+
 func main() {
-	arr := readFile("./input.txt")
+	dataArr := fileutils.ReadFile("./input.txt")
+	arr := parseData(dataArr)
 
 	// Part 1
 	// _, output := executeOpsCommand(arr, int64(1))

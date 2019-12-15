@@ -1,33 +1,12 @@
 package main
 
 import (
-	"bufio"
 	"log"
 	"math"
-	"os"
+	"fileutils"
 	"strconv"
 	"strings"
 )
-
-func readFile(path string) []string {
-	file, err := os.Open(path)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	arr := []string{}
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		arr = append(arr, scanner.Text())
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
-
-	return arr
-}
 
 func decomposeInstructionString(instr string) []string {
 	arrStr := strings.Split(instr, ",")
@@ -174,7 +153,7 @@ func drawSignalWires(wireInputs []string) int {
 }
 
 func main() {
-	wireInputs := readFile("./input.txt")
+	wireInputs := fileutils.ReadFile("./input.txt")
 
 	manDist := drawSignalWires(wireInputs)
 	log.Print(manDist)

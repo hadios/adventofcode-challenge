@@ -32,7 +32,7 @@ func TestCalculateFuel(t *testing.T) {
 	}
 
 	for _, s := range testDataArr {
-		total := CalculateFuel(s.input)
+		total := calculateFuel(s.input)
 
 		if total != s.result {
 			t.Errorf("Result was incorrect, got: %d, want: %d.", total, s.result)
@@ -54,7 +54,7 @@ func TestCalculateFuel(t *testing.T) {
 	}
 
 	for _, s := range testDataArr2 {
-		total := CalculateFuelRepeat(s.input)
+		total := calculateFuelRepeat(s.input)
 
 		if total != s.result {
 			t.Errorf("Result was incorrect, got: %d, want: %d.", total, s.result)

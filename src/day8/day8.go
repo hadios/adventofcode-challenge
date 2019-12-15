@@ -1,31 +1,10 @@
 package main
 
 import (
-	"bufio"
+	"fileutils"
 	"log"
-	"os"
 	"strconv"
 )
-
-func readFile(path string) []string {
-	file, err := os.Open(path)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	arr := []string{}
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		arr = append(arr, scanner.Text())
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
-
-	return arr
-}
 
 func countDigits(num string) [10]int {
 	digitBucket := [10]int{}
@@ -97,7 +76,7 @@ func part2(layerData []string, layerSize int) {
 }
 
 func main() {
-	inputData := readFile("./input.txt")
+	inputData := fileutils.ReadFile("./input.txt")
 
 	layerWidth := 25
 	layerHeight := 6

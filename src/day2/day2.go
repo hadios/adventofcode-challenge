@@ -1,42 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"log"
-	"os"
+	"fileutils"
 	"strconv"
 	"strings"
 )
-
-func readFile(path string) []int64 {
-	file, err := os.Open(path)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	arr := []int64{}
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		text := scanner.Text()
-		arrStr := strings.Split(text, ",")
-
-		for _, s := range arrStr {
-			i, err := strconv.ParseInt(s, 10, 64)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			arr = append(arr, i)
-		}
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
-
-	return arr
-}
 
 func executeOpsCommand(arr []int64) []int64 {
 	indexPtr := 0
@@ -84,13 +53,34 @@ func runInitialState(x int64, y int64, arr []int64) []int64 {
 	return arr
 }
 
+func parseData(dataArr []string) []int64 {
+	arr := []int64{}
+
+	for _, line := range dataArr {
+		arrStr := strings.Split(line, ",")
+
+		for _, s := range arrStr {
+			i, err := strconv.ParseInt(s, 10, 64)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			arr = append(arr, i)
+		}
+	}
+
+	return arr
+}
+
 func main() {
 	var numToSearch int64 = 19690720
+
+	dataArr := fileutils.ReadFile("./input.txt")
 
 	// Brute force search
 	for i := 0; i < 100; i++ {
 		for j := 0; j < 100; j++ {
-			arr := readFile("./input.txt")
+			arr := parseData(dataArr)
 
 			modifiedArr := runInitialState(int64(i), int64(j), arr)
 			finalArr := executeOpsCommand(modifiedArr)

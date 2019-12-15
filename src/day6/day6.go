@@ -1,34 +1,13 @@
 package main
 
 import (
-	"bufio"
+	"fileutils"
 	"log"
-	"os"
 	"strings"
 )
 
 type ListOfPlanets struct {
 	planets []string
-}
-
-func readFile(path string) []string {
-	file, err := os.Open(path)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	arr := []string{}
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		arr = append(arr, scanner.Text())
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
-
-	return arr
 }
 
 func travel(
@@ -122,7 +101,7 @@ func parsePlanetOrbitArr(list []string) (map[string]*ListOfPlanets, string) {
 }
 
 func main() {
-	arr := readFile("./input.txt")
+	arr := fileutils.ReadFile("./input.txt")
 
 	planetList, _ := parsePlanetOrbitArr(arr)
 	visitedPlanet := make(map[string]int)

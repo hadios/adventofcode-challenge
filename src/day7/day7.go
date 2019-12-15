@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fileutils"
 	"log"
 	"os"
 	"strconv"
@@ -324,8 +325,28 @@ func isNumberValid(numToTest int) bool {
 	return true
 }
 
+func parseData(dataArr []string) []int64 {
+	arr := []int64{}
+
+	for _, line := range dataArr {
+		arrStr := strings.Split(line, ",")
+
+		for _, s := range arrStr {
+			i, err := strconv.ParseInt(s, 10, 64)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			arr = append(arr, i)
+		}
+	}
+
+	return arr
+}
+
 func main() {
-	arr := readFile("./input.txt")
+	dataArr := fileutils.ReadFile("./input.txt")
+	arr := parseData(dataArr)
 
 	var highestCount int64 = 0
 	for i := 1234; i <= 43210; i++ {

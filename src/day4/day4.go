@@ -1,33 +1,11 @@
 package main
 
 import (
-	"bufio"
+	"fileutils"
 	"log"
-	"os"
 	"strconv"
 	"strings"
 )
-
-func readFile(path string) []string {
-	file, err := os.Open(path)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	arr := []string{}
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		text := scanner.Text()
-		arr = strings.Split(text, "-")
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
-
-	return arr
-}
 
 func isIncreasingDigits(num int64) bool {
 	prevRem := num % 10
@@ -91,16 +69,19 @@ func hasNoLargerDoubleDigits(num int64) bool {
 }
 
 func main() {
-	limits := readFile("./input.txt")
+	dataStr := fileutils.ReadFile("./input.txt")
 
+	limits := strings.Split(dataStr[0], "-")
 	min, _ := strconv.ParseInt(limits[0], 10, 64)
 	max, _ := strconv.ParseInt(limits[1], 10, 64)
 
 	count := 0
 	for i := min; i <= max; i++ {
-		// if isValidPassword_Part2(i) {
+		// Part 1
+		// if isIncreasingDigits(i) && hasDoubleDigits(i) {
+
+		// Part 2
 		if isIncreasingDigits(i) && hasDoubleDigits(i) && hasNoLargerDoubleDigits(i) {
-			log.Print(i)
 			count++
 		}
 	}

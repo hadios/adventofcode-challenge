@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fileutils"
 	"log"
 	"os"
 	"strconv"
@@ -111,12 +112,10 @@ func executeOpsCommand(arr []int64, input []int64) ([]int64, []int64) {
 
 		switch opCode {
 		case 1:
-			log.Printf("%d %d %d %d", instruc, indexPtr, opCode, paramModes)
 			src1 := getParameterSrc(paramModes[0], 1, arr, indexPtr, relativeOffset)
 			src2 := getParameterSrc(paramModes[1], 2, arr, indexPtr, relativeOffset)
 			dest := getParameterSrc(paramModes[2], 3, arr, indexPtr, relativeOffset)
 
-			log.Printf("dest: %d, src1: %d, src2: %d", dest, src1, src2)
 			arr[dest] = arr[src1] + arr[src2]
 			indexPtr += 4
 			break
@@ -221,8 +220,28 @@ func executeOpsCommand(arr []int64, input []int64) ([]int64, []int64) {
 	return arr, input
 }
 
+func parseData(dataArr []string) []int64 {
+	arr := []int64{}
+
+	for _, line := range dataArr {
+		arrStr := strings.Split(line, ",")
+
+		for _, s := range arrStr {
+			i, err := strconv.ParseInt(s, 10, 64)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			arr = append(arr, i)
+		}
+	}
+
+	return arr
+}
+
 func main() {
-	arr := readFile("./input.txt")
+	dataArr := fileutils.ReadFile("./input.txt")
+	arr := parseData(dataArr)
 
 	// Part 1
 	// _, output := executeOpsCommand(arr, []int64{1})
